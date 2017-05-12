@@ -1,0 +1,84 @@
+{
+  "name": "owner",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "uid": {
+      "type": "string",
+      "id": true,
+      "required": true,
+      
+      "isArray": false
+    },
+    "password": {
+      "type": "string",
+      "id": true,
+      "required": true,
+      
+      "isArray": false
+    },
+    "mobile": {
+      "type": "number",
+      "id": true,
+      "required": true,
+      "isArray": false
+    },
+    "buisness_details": {
+      "type": [
+        "object"
+      ],
+      "required": false,
+      "index": true,
+      "isArray": true
+    },
+    "service_list": {
+      "type": [
+        "object"
+      ],
+      "required": false,
+      "index": true,
+      "isArray": true
+    },
+    "txn_ref": {
+      "type": "object",
+      "required": false,
+      "index": true,
+      "isArray": false
+    },
+    "monthly_total": {
+      "type": "number",
+      "id": true,
+      "required": false,
+      "isArray": false
+    },
+    "daily_total": {
+      "type": "number",
+      "id": true,
+      "required": false,
+      "isArray": false
+    },
+    "annual_total": {
+      "type": "number",
+      "id": true,
+      "required": false,
+      "isArray": false
+    },
+    "credit_totoal": {
+      "type": "number",
+      "id": true,
+      "required": false,
+      "isArray": false
+    },
+    "email": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

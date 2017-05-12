@@ -1,0 +1,30 @@
+{
+  "name": "transaction",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "uid": {
+      "type": "string",
+      "required": true
+    },
+    "cust_id": {
+      "type": "string",
+      "required": true
+    },
+    "txn_details": {
+      "type": "object",
+      "required": true
+    },
+    "timestamp": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

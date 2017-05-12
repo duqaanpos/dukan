@@ -1,0 +1,941 @@
+paths:
+  /customers:
+    post:
+      tags:
+        - customer
+      summary: Create a new instance of the model and persist it into the data source.
+      operationId: customer.create
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+    put:
+      tags:
+        - customer
+      summary: Patch an existing model instance or insert a new one into the data source.
+      operationId: customer.upsert__put_customers
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+    patch:
+      tags:
+        - customer
+      summary: Patch an existing model instance or insert a new one into the data source.
+      operationId: customer.upsert__patch_customers
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+    get:
+      tags:
+        - customer
+      summary: Find all instances of the model matched by filter from the data source.
+      operationId: customer.find
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/customer'
+      deprecated: false
+  /customers/replaceOrCreate:
+    post:
+      tags:
+        - customer
+      summary: Replace an existing model instance or insert a new one into the data source.
+      operationId: customer.replaceOrCreate
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+  /customers/upsertWithWhere:
+    post:
+      tags:
+        - customer
+      summary: Update an existing model instance or insert a new one into the data source based on the where criteria.
+      operationId: customer.upsertWithWhere
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+  '/customers/{id}/exists':
+    get:
+      tags:
+        - customer
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'customer.exists__get_customers_{id}_exists'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+  '/customers/{id}':
+    head:
+      tags:
+        - customer
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'customer.exists__head_customers_{id}'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+    get:
+      tags:
+        - customer
+      summary: 'Find a model instance by {{id}} from the data source.'
+      operationId: customer.findById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: filter
+          in: query
+          description: 'Filter defining fields and include - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+    delete:
+      tags:
+        - customer
+      summary: 'Delete a model instance by {{id}} from the data source.'
+      operationId: customer.deleteById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+      deprecated: false
+    put:
+      tags:
+        - customer
+      summary: Patch attributes for a model instance and persist it into the data source.
+      operationId: 'customer.prototype.updateAttributes__put_customers_{id}'
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/customer'
+        - name: id
+          in: path
+          description: customer id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+    patch:
+      tags:
+        - customer
+      summary: Patch attributes for a model instance and persist it into the data source.
+      operationId: 'customer.prototype.updateAttributes__patch_customers_{id}'
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/customer'
+        - name: id
+          in: path
+          description: customer id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+  '/customers/{id}/replace':
+    post:
+      tags:
+        - customer
+      summary: Replace attributes for a model instance and persist it into the data source.
+      operationId: customer.replaceById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+  /customers/findOne:
+    get:
+      tags:
+        - customer
+      summary: Find first instance of the model matched by filter from the data source.
+      operationId: customer.findOne
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/customer'
+      deprecated: false
+  /customers/update:
+    post:
+      tags:
+        - customer
+      summary: 'Update instances of the model matched by {{where}} from the data source.'
+      operationId: customer.updateAll
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/customer'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            description: Information related to the outcome of the operation
+            type: object
+            properties:
+              count:
+                description: The number of instances updated
+                type: number
+                format: double
+      deprecated: false
+  /customers/count:
+    get:
+      tags:
+        - customer
+      summary: Count instances of the model matched by where from the data source.
+      operationId: customer.count
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  /owners:
+    post:
+      tags:
+        - owner
+      summary: Create a new instance of the model and persist it into the data source.
+      operationId: owner.create
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+    put:
+      tags:
+        - owner
+      summary: Patch an existing model instance or insert a new one into the data source.
+      operationId: owner.upsert__put_owners
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+    patch:
+      tags:
+        - owner
+      summary: Patch an existing model instance or insert a new one into the data source.
+      operationId: owner.upsert__patch_owners
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+    get:
+      tags:
+        - owner
+      summary: Find all instances of the model matched by filter from the data source.
+      operationId: owner.find
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/owner'
+      deprecated: false
+  /owners/replaceOrCreate:
+    post:
+      tags:
+        - owner
+      summary: Replace an existing model instance or insert a new one into the data source.
+      operationId: owner.replaceOrCreate
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+  /owners/upsertWithWhere:
+    post:
+      tags:
+        - owner
+      summary: Update an existing model instance or insert a new one into the data source based on the where criteria.
+      operationId: owner.upsertWithWhere
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+  '/owners/{id}/exists':
+    get:
+      tags:
+        - owner
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'owner.exists__get_owners_{id}_exists'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+  '/owners/{id}':
+    head:
+      tags:
+        - owner
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'owner.exists__head_owners_{id}'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+    get:
+      tags:
+        - owner
+      summary: 'Find a model instance by {{id}} from the data source.'
+      operationId: owner.findById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: filter
+          in: query
+          description: 'Filter defining fields and include - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+    delete:
+      tags:
+        - owner
+      summary: 'Delete a model instance by {{id}} from the data source.'
+      operationId: owner.deleteById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+      deprecated: false
+    put:
+      tags:
+        - owner
+      summary: Patch attributes for a model instance and persist it into the data source.
+      operationId: 'owner.prototype.updateAttributes__put_owners_{id}'
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/owner'
+        - name: id
+          in: path
+          description: owner id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+    patch:
+      tags:
+        - owner
+      summary: Patch attributes for a model instance and persist it into the data source.
+      operationId: 'owner.prototype.updateAttributes__patch_owners_{id}'
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/owner'
+        - name: id
+          in: path
+          description: owner id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+  '/owners/{id}/replace':
+    post:
+      tags:
+        - owner
+      summary: Replace attributes for a model instance and persist it into the data source.
+      operationId: owner.replaceById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            description: Model instance data
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+  /owners/findOne:
+    get:
+      tags:
+        - owner
+      summary: Find first instance of the model matched by filter from the data source.
+      operationId: owner.findOne
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/owner'
+      deprecated: false
+  /owners/update:
+    post:
+      tags:
+        - owner
+      summary: 'Update instances of the model matched by {{where}} from the data source.'
+      operationId: owner.updateAll
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            description: An object of model property name/value pairs
+            $ref: '#/definitions/owner'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            description: Information related to the outcome of the operation
+            type: object
+            properties:
+              count:
+                description: The number of instances updated
+                type: number
+                format: double
+      deprecated: false
+  /owners/count:
+    get:
+      tags:
+        - owner
+      summary: Count instances of the model matched by where from the data source.
+      operationId: owner.count
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  /owners/login:
+    post:
+      tags:
+        - owner
+      summary: Login a user with username/email and password.
+      operationId: owner.login
+      parameters:
+        - name: credentials
+          in: body
+          required: true
+          schema:
+            type: object
+        - name: include
+          in: query
+          description: Related objects to include in the response. See the description of return value for more details.
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            description: >+
+              The response body contains properties of the AccessToken created on
+              login.
+
+              Depending on the value of `include` parameter, the body may contain
+              additional properties:
+
+
+
+
+
+
+
+                - `user` - `U+007BUserU+007D` - Data of the currently logged in
+
+              user. (`include=user`)
+
+
+            type: object
+      deprecated: false
+  /owners/logout:
+    post:
+      tags:
+        - owner
+      summary: Logout a user with access token.
+      operationId: owner.logout
+      parameters: []
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  /owners/confirm:
+    get:
+      tags:
+        - owner
+      summary: Confirm a user registration with email verification token.
+      operationId: owner.confirm
+      parameters:
+        - name: uid
+          in: query
+          required: true
+          type: string
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: redirect
+          in: query
+          required: false
+          type: string
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  /owners/reset:
+    post:
+      tags:
+        - owner
+      summary: Reset password for a user with email.
+      operationId: owner.resetPassword
+      parameters:
+        - name: options
+          in: body
+          required: true
+          schema:
+            type: object
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+definitions:
+  customer:
+    properties:
+      cust_name:
+        type: string
+      phone:
+        type: number
+        format: double
+      credit:
+        type: number
+        format: double
+      email:
+        type: string
+      id:
+        $ref: '#/definitions/ObjectID'
+    required:
+      - cust_name
+      - phone
+      - credit
+      - email
+    additionalProperties: false
+  x-any:
+    properties: {}
+  owner:
+    properties:
+      uid:
+        type: string
+      mobile:
+        type: number
+        format: double
+      buisness_details:
+        type: array
+        items:
+          type: object
+      service_list:
+        type: array
+        items:
+          type: object
+      txn_ref:
+        type: object
+      monthly_total:
+        type: number
+        format: double
+      daily_total:
+        type: number
+        format: double
+      annual_total:
+        type: number
+        format: double
+      credit_totoal:
+        type: number
+        format: double
+      email:
+        type: string
+      realm:
+        type: string
+      username:
+        type: string
+      credentials:
+        type: object
+      challenges:
+        type: object
+      emailVerified:
+        type: boolean
+      status:
+        type: string
+      created:
+        type: string
+        format: date-time
+      lastUpdated:
+        type: string
+        format: date-time
+    required:
+      - uid
+      - mobile
+      - buisness_details
+      - service_list
+      - txn_ref
+      - monthly_total
+      - daily_total
+      - annual_total
+      - credit_totoal
+      - email
+    additionalProperties: false
+  ObjectID:
+    type: string
+    pattern: "^[a-fA-F\\d]{24}$"
+basePath: /api
+swagger: '2.0'
+info:
+  x-ibm-name: dukan
+  version: 1.0.0
+  title: dukan
+schemes:
+  - https
+host: $(catalog.host)
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+  clientSecretHeader:
+    in: header
+    name: X-IBM-Client-Secret
+    type: apiKey
+security:
+  - clientIdHeader: []
+    clientSecretHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  catalogs:
+    apic-dev:
+      properties:
+        runtime-url: $(TARGET_URL)
+    sb:
+      properties:
+        runtime-url: 'http://localhost:4001'
+  assembly:
+    execute:
+      - invoke:
+          target-url: $(runtime-url)$(request.path)$(request.search)
