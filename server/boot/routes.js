@@ -4,81 +4,131 @@
 
 
 module.exports = function(app) {
-  // Install a "/ping" route that returns "pong"
+  
   var User = app.models.owner;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
   var randomToken = require('random-token');
   
+  var mongoose = require('mongoose')
+  
 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
   app.use(passport.initialize());
 
-
-  var mongoose = require("mongoose");
-  var db = mongoose.connect('mongodb://127.0.0.1:27017/duqaan');
-  mongoose.connection.once('connected', function() {
-  console.log("Database connected successfully")
-  });
-
-
-
-  app.get('/ping', function(req, res) {
-    res.send('pong');
-  });
-
-
+  
   app.post('/signup', function(req, res) {
 
+  //  if (!req.body.uid || !req.body.password  || !req.body.mobile) {
 
-    console.log("hello in signup", req.body);
-    if (!req.body.uid || !req.body.password  || !req.body.mobile) {
-
-    res.json({success: false, msg: 'Please fill details again'});
-  } else {
+ //   res.json({success: false, msg: 'Please fill details again'});
+ // } else {
 
 
     var newUser = new User({
-      uid: req.body.uid,
+      username: req.body.username,
       password: req.body.password,
-      mobile : req.body.mobile
+      mobile : req.body.mobile,
+      fullName : req.body.fullName,
+      shopNo : req.body.shopNo,
+      street : req.body.street,
+      state : req.body.state,
+      city : req.body.city,
+      pincode : req.body.pincode
+
     });
+
+  
     // save the user
-    newUser.save(function(err) {
+    newUser.save(function(err, createdUserObject) {
       if (err) {
-        console.log("err", err);
+        console.log("err in signup", err);
+        if(err.code == 11000)
+          return res.send("duplicate key error")
+        else
         return res.send(err);
       }
-      res.json({success: true, msg: 'user is being registered'});
-    });
-  }
-});
 
+    res.json({user:createdUserObject,success: true, msg: 'user is being registered',status : "1"});
+
+    }); 
+    
+    
+  
+  });
+
+
+  app.post('/signup/checkUsername',function(req,res) {
+
+    var flag = true;
+    console.log(req.body.username);
+
+    if(!req.body.username)
+      return res.send("undefined username");
+
+    if(!req.body.username)
+      res.json({success: false, msg: 'Please fill details again',status : '1'});
+
+    User.find({
+    username : req.body.username
+    },function(err, user) {
+
+   console.log(user);
+
+    if (err) {
+        console.log("err", err);
+         return res.send(err);
+      } 
+ 
+    user.forEach(function(element) {
+
+      if((element.username == req.body.username) && flag) {
+        flag = false;
+        console.log(flag);
+        return res.send({success: true, msg: 'Username exists', status : '1'});
+                
+      }
+              
+    });    
+      
+      if(flag == true)
+        return res.send({success: false, msg: 'Username does not exists', status : '0'});
+
+
+   });
+
+  });  
 
 
 app.post('/authenticate', function(req,res) {
 
   User.findOne({
-    mobile : req.body.password
+    username : req.body.username
   }, function(err, user) {
-    if (err) throw err;
+    console.log(user);
+    if (err) {
+      console.log("err",err);
+      res.send(err);
+    }
  
-    if (!user) {
-      res.send({success: false, msg: 'Authentication failed. User not found.'});
-    } else {
+  //  if (!user) {
+    // 
+   // } else 
+
+          console.log(user.username);
+            console.log(req.body.username);
       // check if mobileNo matches
-        if(this.password == req.body.password)
-          {          
+        if(user.username === req.body.username)
+          {                   
           // if user is found and mobileNo is right create a token
-            var token = random-token(16)
+           // var token = random-token(16)
           // return the information including token as JSON
-            res.json({success: true, token:token});
-          } else {
-            res.send({success: false, msg: 'Authentication failed. Wrong password.'});
-            }   
-        }
+            return res.json({success: true,msg: 'Authentication done',status:'1'});
+          } 
+
+        return res.json({success: false, msg: 'Authentication failed. User not found.',status:'0'});
+        
 
       });
 });
@@ -86,10 +136,10 @@ app.post('/authenticate', function(req,res) {
 
 app.post('/login' , function(req,res) { 
 
-  var uid = req.body.uid;
+  var username = req.body.username;
   var password = req.body.password;
 
-  User.findOne({uid: uid, password: password}, function(err,user) {
+  User.find({username: username, password: password}, function(err,user) {
 
     if(err) {
       console.log(err);
@@ -97,14 +147,15 @@ app.post('/login' , function(req,res) {
     }
 
     if(!user) {
-    return res.status(404).send("not found");
+    return res.status(404).send("user not found");
     }
 
-    return res.status(200).send("login Successful");
-    });     
+    return res.status(200).send({user : user, msg: 'login Successful',status:'0'})
+
+  });     
  
 
-  });
+});
 
 
 
