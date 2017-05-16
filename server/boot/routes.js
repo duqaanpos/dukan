@@ -95,11 +95,12 @@ module.exports = function(app) {
   });  
 
 
+/*
 app.post('/authenticate', function(req,res) {
 
   var flag = true;
 
-  User.find({
+  User.findById({
     username : req.body.username
   }, function(err, user) {
     console.log(user);
@@ -110,23 +111,24 @@ app.post('/authenticate', function(req,res) {
  
  
 
-          console.log(user.username);
-            console.log(req.body.username);
+   console.log(user.username);
+   console.log(req.body.username);
 
 
-    user.forEach(function(element) {
+   user.forEach(function(element) {
 
       if((element.username == req.body.username) && flag) {
         flag = false;
         console.log(flag);
-        const id = crypto.randomBytes(16).toString("hex");
-        console.log(id);  
-        return res.send({success: true, userid : id ,msg: 'Authentication done.', status : '1'});
+    //    const id = crypto.randomBytes(16).toString("hex");
+      //  console.log(id);  
+        return res.send({success: true,msg: 'Authentication done.', status : '1'});
                 
       }
       
     });        
    
+
         if (flag==true)
         return res.json({success: false, msg: 'Authentication failed. User not found.',status:'0'});
         
@@ -134,13 +136,15 @@ app.post('/authenticate', function(req,res) {
       });
 });
 
+*/
 
-app.post('/login' , function(req,res) { 
+
+app.post('/authenticate' , function(req,res) { 
 
   var username = req.body.username;
   var password = req.body.password;
 
-  User.find({username: username, password: password}, function(err,user) {
+   User.findById(req.body.username, function (err, user) {
 
     if(err) {
       console.log(err);
@@ -148,10 +152,13 @@ app.post('/login' , function(req,res) {
     }
 
     if(!user) {
-    return res.status(404).send("user not found");
+    return res.status(404).send("username not found");
     }
 
-    return res.status(200).send({user : user, msg: 'login Successful',status:'0'})
+    if(req.body.password == user.password)
+      return res.status(200).send({success : true, user : user, msg: 'login Successful',status:'1'})
+    else 
+      return res.send({success: false, msg: 'password not matched',status:'0'});
 
   });     
  
@@ -196,19 +203,6 @@ app.post('/buisness' , function(req,res) {
 });
 
 }
-
-
-/*
-
-app.get("/history", function(req,res) {
-
-
-  User.findbyId(req.body.username)
-}
-
-
-*/
-
 
 
 
