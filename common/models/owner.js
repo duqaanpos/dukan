@@ -3,7 +3,7 @@
 
  var mongoose = require("mongoose");
  var Schema = mongoose.Schema;
- mongoose.connect('mongodb://localhost/duqaan');
+ mongoose.connect('mongodb://duqaandb:duqaandb@ds031257.mlab.com:31257/duqaandb');
 
  console.log("mongoose connected");
  var userSchema = new Schema({

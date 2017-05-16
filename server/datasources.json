@@ -1,9 +1,11 @@
 {
   "mongodb": {
-    "host": "127.0.0.1",
-    "port": 27017,
-    "database": "duqaan",
+    "host": "ds031257.mlab.com",
+    "port": "31257",
+    "database": "duqaandb",
     "name": "mongodb",
+    "username" : "duqaandb",
+    "password" : "duqaandb",
     "connector": "mongodb"
   }
 }
