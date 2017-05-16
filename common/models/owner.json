@@ -9,21 +9,21 @@
     
     "username": {
       "type": "string",
-      "id": false,
+      "id": true,
       "required": true,      
       "isArray": false,
       "unique" :true
     },
     "password": {
       "type": "string",
-      "id": true,
+      "id": false,
       "required": true,
       "unique" : false,
       "isArray": false
     },
     "mobile": {
       "type": "number",
-      "id": true,
+      "id": false,
       "required": true,
       "isArray": false,
       "unique" : true
@@ -67,12 +67,9 @@
       "unique" : false
     },    
     "buisness_details": {
-      "type": [
-        "object"
-      ],
+      "type": "object",
       "required": false,
-      "index": true,
-      "isArray": true
+      "index": true      
     },
     "service_list": {
       "type": [

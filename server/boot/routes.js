@@ -9,6 +9,7 @@ module.exports = function(app) {
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
   var randomToken = require('random-token');
+  var crypto = require("crypto");
   
   var mongoose = require('mongoose')
   
@@ -20,13 +21,7 @@ module.exports = function(app) {
   
   app.post('/signup', function(req, res) {
 
-  //  if (!req.body.uid || !req.body.password  || !req.body.mobile) {
-
- //   res.json({success: false, msg: 'Please fill details again'});
- // } else {
-
-
-    var newUser = new User({
+      var newUser = new User({
       username: req.body.username,
       password: req.body.password,
       mobile : req.body.mobile,
@@ -95,7 +90,6 @@ module.exports = function(app) {
       if(flag == true)
         return res.send({success: false, msg: 'Username does not exists', status : '0'});
 
-
    });
 
   });  
@@ -103,7 +97,9 @@ module.exports = function(app) {
 
 app.post('/authenticate', function(req,res) {
 
-  User.findOne({
+  var flag = true;
+
+  User.find({
     username : req.body.username
   }, function(err, user) {
     console.log(user);
@@ -112,21 +108,26 @@ app.post('/authenticate', function(req,res) {
       res.send(err);
     }
  
-  //  if (!user) {
-    // 
-   // } else 
+ 
 
           console.log(user.username);
             console.log(req.body.username);
-      // check if mobileNo matches
-        if(user.username === req.body.username)
-          {                   
-          // if user is found and mobileNo is right create a token
-           // var token = random-token(16)
-          // return the information including token as JSON
-            return res.json({success: true,msg: 'Authentication done',status:'1'});
-          } 
 
+
+    user.forEach(function(element) {
+
+      if((element.username == req.body.username) && flag) {
+        flag = false;
+        console.log(flag);
+        const id = crypto.randomBytes(16).toString("hex");
+        console.log(id);  
+        return res.send({success: true, userid : id ,msg: 'Authentication done.', status : '1'});
+                
+      }
+      
+    });        
+   
+        if (flag==true)
         return res.json({success: false, msg: 'Authentication failed. User not found.',status:'0'});
         
 
@@ -159,94 +160,56 @@ app.post('/login' , function(req,res) {
 
 
 
+app.post('/buisness' , function(req,res) { 
+
+
+  var buisness_details = {
+
+      store_name : req.body.storename,
+      retailer_type : req.body.retailer_type,
+      sell_type : req.body.sell_type,
+      buisness_owner : req.body.buisness_owner,
+      people_no : req.body.people_no,
+      buisness_age : req.body.buisness_age,
+      buisness_track : req.body.buisness_track,
+      buisness_interest : req.body.buisness_interest
+
+  }
+
+
+
+  User.findById(req.body.username, function (err, user) {
+  if (err) return handleError(err);
+
+  console.log("findbyid user",user);
+  
+  user.buisness_details = buisness_details;
+  user.save(function (err, updatedUser) {
+    if (err) return handleError(err);
+    res.send(updatedUser);
+  });
+
+  });
+ 
+ 
+
+});
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
 
+app.get("/history", function(req,res) {
 
 
-var dsConfig = require('../datasources.json');
-
-module.exports = function(app) {
-  var User = app.models.owner;
-  //var router = app.Router();
-
-  var mongoose = require("mongoose");
-  var db = mongoose.connect('mongodb://127.0.0.1:27017/duqaan');
-
-  mongoose.connection.once('connected', function() {
-
-  console.log("Database connected successfully")
-
-  });
-
-
-
-app.get('/', function(req, res) {
-
-  console.log("hi");
-  res.send('Hello! The API is at api');
-});
-
-
-app.post('/signup', function(req, res) {
-  if (!req.body.name || !req.body.password) {
-    res.json({success: false, msg: 'Please pass name and password.'});
-  } else {
-    var newUser = new User({
-      name: req.body.name,
-      password: req.body.password
-    });
-    // save the user
-    newUser.save(function(err) {
-      if (err) {
-        return res.json({success: false, msg: 'Username already exists.'});
-      }
-      res.json({success: true, msg: 'Successful created new user.'});
-    });
-  }
-});
-
+  User.findbyId(req.body.username)
 }
 
 
+*/
 
 
-
-
-
-
-
-
-
-
-/*app.post('/register', function(req, res) {
-
-  var uid = req.body.uid;
-  var password = req.body.password;
-  var mobile = req.body.mobile;
-
-  
-
-}*/
 
 
 
