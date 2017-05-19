@@ -11,7 +11,14 @@ module.exports = function(app) {
   var randomToken = require('random-token');
   var crypto = require("crypto");
   
-  var mongoose = require('mongoose')
+  var mongoose = require('mongoose');
+  var hash = require("password-hash");
+  var crypto = require("crypto");
+
+
+  var bcrypt = require("bcrypt");
+  var SALT_WORK_FACTOR = 10;
+  const uuidV1 = require('uuid/v1');
   
 
   app.use(bodyParser.json()); // for parsing application/json
@@ -21,9 +28,16 @@ module.exports = function(app) {
   
   app.post('/signup', function(req, res) {
 
+    var salt = bcrypt.genSaltSync(10);
+    // Hash the password with the salt
+    var hash = bcrypt.hashSync(req.body.password, salt);
+
+    var _id = uuidV1(); 
+
       var newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
+      id : _id,
+      username: req.body.username.toLowerCase(),
+      password: hash,
       mobile : req.body.mobile,
       fullName : req.body.fullName,
       shopNo : req.body.shopNo,
@@ -32,9 +46,9 @@ module.exports = function(app) {
       city : req.body.city,
       pincode : req.body.pincode
 
-    });
+    }); // Generate a salt
 
-  
+      
     // save the user
     newUser.save(function(err, createdUserObject) {
       if (err) {
@@ -45,7 +59,7 @@ module.exports = function(app) {
         return res.send(err);
       }
 
-    res.json({user:createdUserObject,success: true, msg: 'user is being registered',status : "1"});
+    res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
 
     }); 
     
@@ -63,7 +77,7 @@ module.exports = function(app) {
       return res.send("undefined username");
 
     if(!req.body.username)
-      res.json({success: false, msg: 'Please fill details again',status : '1'});
+      res.json({success: false, msg: 'Please fill details again',status : '0'});
 
     User.find({
     username : req.body.username
@@ -95,56 +109,24 @@ module.exports = function(app) {
   });  
 
 
-/*
-app.post('/authenticate', function(req,res) {
-
-  var flag = true;
-
-  User.findById({
-    username : req.body.username
-  }, function(err, user) {
-    console.log(user);
-    if (err) {
-      console.log("err",err);
-      res.send(err);
-    }
- 
- 
-
-   console.log(user.username);
-   console.log(req.body.username);
-
-
-   user.forEach(function(element) {
-
-      if((element.username == req.body.username) && flag) {
-        flag = false;
-        console.log(flag);
-    //    const id = crypto.randomBytes(16).toString("hex");
-      //  console.log(id);  
-        return res.send({success: true,msg: 'Authentication done.', status : '1'});
-                
-      }
-      
-    });        
-   
-
-        if (flag==true)
-        return res.json({success: false, msg: 'Authentication failed. User not found.',status:'0'});
-        
-
-      });
-});
-
-*/
-
 
 app.post('/authenticate' , function(req,res) { 
+ 
 
-  var username = req.body.username;
-  var password = req.body.password;
+ console.log(req.body.password);
 
-   User.findById(req.body.username, function (err, user) {
+ var flag = true;
+ var authUser = {};
+
+ // var salt = bcrypt.genSaltSync(10);
+    // Hash the password with the salt
+   //var hash1 = bcrypt.hashSync(req.body.password, salt);
+
+  // console.log(hash1);
+
+   console.log(req.body.username);
+
+   User.find({username:req.body.username.toLowerCase()}, function (err, user) {
 
     if(err) {
       console.log(err);
@@ -152,15 +134,38 @@ app.post('/authenticate' , function(req,res) {
     }
 
     if(!user) {
-    return res.status(404).send("username not found");
+    return res.status(404).send({success: false, msg: 'username not found',status:'0'});
     }
 
-    if(req.body.password == user.password)
-      return res.status(200).send({success : true, user : user, msg: 'login Successful',status:'1'})
-    else 
-      return res.send({success: false, msg: 'password not matched',status:'0'});
+    //console.log(user);
 
-  });     
+    user.forEach(function(element) {
+
+      
+      if((element.username == req.body.username) && flag) {
+                
+       
+       console.log(element.password);
+       //console.log(hash);
+       var result  = bcrypt.compareSync(req.body.password,element.password);
+      
+         if(result) {
+
+          flag = false;
+          authUser = element;
+          console.log(flag);
+          
+      }
+     }
+           
+    });
+
+    if(!flag)      
+       return res.send({success : true,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
+      else return res.send({success: false, msg: 'password not matched',status:'0'});
+
+  });    
+   
  
 
 });
@@ -184,7 +189,6 @@ app.post('/buisness' , function(req,res) {
   }
 
 
-
   User.findById(req.body.username, function (err, user) {
   if (err) return handleError(err);
 
@@ -201,6 +205,9 @@ app.post('/buisness' , function(req,res) {
  
 
 });
+
+
+
 
 }
 
