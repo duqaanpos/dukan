@@ -8,18 +8,18 @@ module.exports = function(app) {
   var User = app.models.owner;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
-  var randomToken = require('random-token');
-  var crypto = require("crypto");
+//var randomToken = require('random-token');
+//  var crypto = require("crypto");
   
   var mongoose = require('mongoose');
-  var hash = require("password-hash");
+//  var hash = require("password-hash");
   var crypto = require("crypto");
 
 
-  var bcrypt = require("bcrypt");
+  var bcrypt = require('bcryptjs');
   var SALT_WORK_FACTOR = 10;
   const uuidV1 = require('uuid/v1');
-  
+  var buisness_flag = false;  
 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -44,7 +44,8 @@ module.exports = function(app) {
       street : req.body.street,
       state : req.body.state,
       city : req.body.city,
-      pincode : req.body.pincode
+      pincode : req.body.pincode,
+
 
     }); // Generate a salt
 
@@ -92,7 +93,7 @@ module.exports = function(app) {
  
     user.forEach(function(element) {
 
-      if((element.username == req.body.username) && flag) {
+      if((element.username == req.body.username.toLowerCase()) && flag) {
         flag = false;
         console.log(flag);
         return res.send({success: true, msg: 'Username exists', status : '1'});
@@ -142,7 +143,7 @@ app.post('/authenticate' , function(req,res) {
     user.forEach(function(element) {
 
       
-      if((element.username == req.body.username) && flag) {
+      if((element.username == req.body.username.toLowerCase()) && flag) {
                 
        
        console.log(element.password);
@@ -161,8 +162,8 @@ app.post('/authenticate' , function(req,res) {
     });
 
     if(!flag)      
-       return res.send({success : true,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
-      else return res.send({success: false, msg: 'password not matched',status:'0'});
+       return res.send({success : true,buisness_flag : buisness_flag,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
+      else return res.send({success: false,buisness_flag :buisness_flag, msg: 'password not matched',status:'0'});
 
   });    
    
@@ -189,15 +190,16 @@ app.post('/buisness' , function(req,res) {
   }
 
 
-  User.findById(req.body.username, function (err, user) {
+  User.findById(req.body.id, function (err, user) {
   if (err) return handleError(err);
 
-  console.log("findbyid user",user);
+  console.log(user);
   
   user.buisness_details = buisness_details;
+  buisness_flag = true;
   user.save(function (err, updatedUser) {
     if (err) return handleError(err);
-    res.send(updatedUser);
+    res.send({success : true,msg: 'buisness details have been saved',status:'1'})
   });
 
   });
