@@ -173,7 +173,7 @@ app.post('/authenticate' , function(req,res) {
 
 
 
-app.post('/buisness' , function(req,res) { 
+app.post('/business' , function(req,res) { 
 
 
   var buisness_details = {
