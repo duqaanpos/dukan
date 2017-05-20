@@ -6,6 +6,7 @@
 module.exports = function(app) {
   
   var User = app.models.owner;
+ // var Services = app.models.services;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
 //var randomToken = require('random-token');
@@ -205,6 +206,105 @@ app.post('/business' , function(req,res) {
   });
  
  
+
+});
+
+
+
+app.post('/serviceRegister', function(req,res) {
+
+ var _id = uuidV1(); 
+/*
+      var newService = new Services({
+      id : _id,
+      category : req.body.category,
+      sub_category1 : req.body.sub_category1,
+      sub_category2 : req.body.sub_category2,
+      rate :req.body.rate,
+      volume : req.body.volume
+
+    }); // Generate a salt
+
+      
+    // save 
+    newService.save(function(err, createdServiceObject) {
+      if (err) {
+        console.log("err in signup", err);
+        if(err.code == 11000)
+          return res.send("duplicate key error")
+        else
+        return res.send(err);
+      }
+
+//    res.json({service:createdServiceObject,_id : _id,success: true, msg: 'service created',status : "1"});
+
+    }); 
+*/
+
+   var service =  {
+      id : _id,
+      category : req.body.category,
+      sub_category1 : req.body.sub_category1,
+      sub_category2 : req.body.sub_category2,
+      rate :req.body.rate,
+      volume : req.body.volume
+
+    }
+
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    if(!user) {
+    return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+
+   console.log(user);  
+
+   if(user.service_list[0] != null)
+    user.service_list.push(service);
+   else user.service_list = [service];
+
+
+  user.save(function (err, updatedUser) {
+     if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+  });
+
+  });
+
+
+
+});
+
+
+app.post('/servicelist',function(req,res) {
+
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+  if(!user) {
+    return res.status(404).send({success: false, msg: 'id does not matched',status:'0'});
+    }
+
+ res.send({success : true, service_list:user.service_list,msg: 'service list',status:'1'})
+  
+
+
+
+});
+
 
 });
 

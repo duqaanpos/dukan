@@ -125,9 +125,6 @@
     }
   
 
-
-
-
    });
 
 /*
@@ -165,9 +162,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 */
 
 mongoose.connect('mongodb://duqaandb:duqaandb@ds031257.mlab.com:31257/duqaandb');
-
  console.log("mongoose connected");
-
  var owner = mongoose.model('owner', userSchema);
 
  
