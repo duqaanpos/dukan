@@ -19,7 +19,7 @@ module.exports = function(app) {
   var bcrypt = require('bcryptjs');
   var SALT_WORK_FACTOR = 10;
   const uuidV1 = require('uuid/v1');
-  var buisness_flag = false;  
+  var buisness_flag = true;  
 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -45,7 +45,8 @@ module.exports = function(app) {
       state : req.body.state,
       city : req.body.city,
       pincode : req.body.pincode,
-
+      service_list : []
+	
 
     }); // Generate a salt
 
@@ -59,7 +60,7 @@ module.exports = function(app) {
         else
         return res.send(err);
       }
-
+     buisness_flag = false;
     res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
 
     }); 
@@ -207,6 +208,104 @@ app.post('/business' , function(req,res) {
  
 
 });
+
+
+app.post('/serviceRegister', function(req,res) {
+
+ var _id = uuidV1(); 
+/*
+      var newService = new Services({
+      id : _id,
+      category : req.body.category,
+      sub_category1 : req.body.sub_category1,
+      sub_category2 : req.body.sub_category2,
+      rate :req.body.rate,
+      volume : req.body.volume
+    }); // Generate a salt
+      
+    // save 
+    newService.save(function(err, createdServiceObject) {
+      if (err) {
+        console.log("err in signup", err);
+        if(err.code == 11000)
+          return res.send("duplicate key error")
+        else
+        return res.send(err);
+      }
+//    res.json({service:createdServiceObject,_id : _id,success: true, msg: 'service created',status : "1"});
+    }); 
+*/
+
+   var service =  {
+      id : _id,
+      category : req.body.category,
+      sub_category1 : req.body.sub_category1,
+      sub_category2 : req.body.sub_category2,
+      rate :req.body.rate,
+      volume : req.body.volume
+
+    }
+
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    if(!user) {
+    return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+
+   console.log(user); 
+
+    
+
+   if(user.service_list == [])  
+    user.service_list = [service];
+   else 
+    user.service_list.push(service);
+
+
+  user.save(function (err, updatedUser) {
+     if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+  });
+
+  });
+
+
+
+});
+
+
+app.post('/servicelist',function(req,res) {
+
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+  if(!user) {
+    return res.status(404).send({success: false, msg: 'id does not matched',status:'0'});
+    }
+
+ res.send({success : true, service_list:user.service_list,msg: 'service list',status:'1'})
+  
+
+
+
+});
+
+
+});
+
 
 
 
