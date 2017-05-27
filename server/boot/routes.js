@@ -20,7 +20,7 @@ module.exports = function(app) {
   var bcrypt = require('bcryptjs');
   var SALT_WORK_FACTOR = 10;
   const uuidV1 = require('uuid/v1');
-  var buisness_flag = false;  
+  var buisness_flag = true;  
 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -61,9 +61,10 @@ module.exports = function(app) {
         return res.send(err);
       }
 
-    res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
+     buisness_flag = false; 
+     res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
 
-    }); 
+     }); 
     
     
   
@@ -213,34 +214,7 @@ app.post('/business' , function(req,res) {
 
 app.post('/serviceRegister', function(req,res) {
 
- var _id = uuidV1(); 
-/*
-      var newService = new Services({
-      id : _id,
-      category : req.body.category,
-      sub_category1 : req.body.sub_category1,
-      sub_category2 : req.body.sub_category2,
-      rate :req.body.rate,
-      volume : req.body.volume
-
-    }); // Generate a salt
-
-      
-    // save 
-    newService.save(function(err, createdServiceObject) {
-      if (err) {
-        console.log("err in signup", err);
-        if(err.code == 11000)
-          return res.send("duplicate key error")
-        else
-        return res.send(err);
-      }
-
-//    res.json({service:createdServiceObject,_id : _id,success: true, msg: 'service created',status : "1"});
-
-    }); 
-*/
-
+ 
    var service =  {
       id : _id,
       category : req.body.category,
