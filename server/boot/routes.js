@@ -6,6 +6,7 @@
 module.exports = function(app) {
   
   var User = app.models.owner;
+ // var Services = app.models.services;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
 //var randomToken = require('random-token');
@@ -59,11 +60,13 @@ module.exports = function(app) {
           return res.send("duplicate key error")
         else
         return res.send(err);
-      }
-     buisness_flag = false;
-    res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
+      } 
 
-    }); 
+
+     buisness_flag = false; 
+     res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
+
+     }); 
     
     
   
@@ -305,6 +308,14 @@ app.post('/servicelist',function(req,res) {
 
 
 });
+
+
+
+
+
+    
+
+ 
 
 
 
