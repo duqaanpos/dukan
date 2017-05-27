@@ -6,7 +6,9 @@
 module.exports = function(app) {
   
   var User = app.models.owner;
- // var Services = app.models.services;
+  var transaction = app.models.transaction;
+  var customer = app.models.customer;
+ // var employee =  app.models.employee;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
 //var randomToken = require('random-token');
@@ -46,7 +48,10 @@ module.exports = function(app) {
       state : req.body.state,
       city : req.body.city,
       pincode : req.body.pincode,
-      service_list : []
+      service_list : [],
+      monthly_total : 0,
+      daily_total : 0,
+      annual_total : 0
 	
 
     }); // Generate a salt
@@ -239,7 +244,8 @@ app.post('/serviceRegister', function(req,res) {
     }); 
 */
 
-   var service =  {
+  
+  var service =  {
       id : _id,
       category : req.body.category,
       sub_category1 : req.body.sub_category1,
@@ -248,6 +254,7 @@ app.post('/serviceRegister', function(req,res) {
       volume : req.body.volume
 
     }
+   
 
 
   User.findById(req.body.id, function (err, user) {
@@ -310,6 +317,108 @@ app.post('/servicelist',function(req,res) {
 });
 
 
+app.post('/transaction', function(req,res) {
+
+  var _id = uuidV1(); 
+
+
+  var newTransaction = new transaction({
+      id : _id,
+      uid : req.body.uid,
+      txn_amount : req.body.txn_amount,
+      cust_id : req.body.cust_id,
+      timestamp : req.body.timestamp,
+      txn_details : req.body.txn_details,
+      employee : req.body.employee,
+      mode_of_payment : req.body.mode_of_payment
+
+    });
+
+  if(req.body.mode_of_payment == "credit")
+    // save credit to total credit of customer and User
+
+  
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    if(!user) {
+    return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+
+   console.log(user);    
+
+   user.daily_total += txn_amount;
+   user.monthly_total += txn_amount;
+   
+   user.employee_list.forEach(function(employee) {
+
+    if(req.body.employee.empId == employee.empId)
+      employee.txn_amount += req.body.txn_amount;
+
+   });
+
+   
+
+
+  user.save(function (err, updatedUser) {
+     if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+    res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+  });
+
+  });
+ 
+
+  newTransaction.save(function(err, createdTransObject) {
+      if (err) {
+        console.log("err in signup", err);
+        if(err.code == 11000)
+          return res.send("duplicate key error")
+        else
+        return res.send(err);
+      } 
+
+
+     
+     res.json({user:createdTransObject,_id : _id,success: true, msg: 'Transaction saved',status : "1"});
+
+  }); 
+
+
+
+});  
+
+
+app.post('/employeelist',function(req,res) {
+
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+
+  if(!user) {
+    return res.status(404).send({success: false, msg: 'id does not matched',status:'0'});
+    }
+
+ res.send({success : true, employee_list:user.employee_list,msg: 'employee list',status:'1'})
+  
+
+
+
+});
+
+});
+
+
+}
 
 
 
@@ -318,10 +427,6 @@ app.post('/servicelist',function(req,res) {
  
 
 
-
-
-
-}
 
 
 

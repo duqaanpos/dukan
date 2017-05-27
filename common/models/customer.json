@@ -10,11 +10,11 @@
       "type": "string",
       "required": true
     },
-    "phone": {
+    "contact_no": {
       "type": "number",
       "required": true
     },
-    "credit": {
+    "totalCredit": {
       "type": "number",
       "required": true
     },

@@ -6,7 +6,7 @@ var serviceSchema = new Schema({
 	 "id" : {
 
       "type" : "string",
-      "id" : "true"
+      "id" : true
   	},
     "category": {
       "type": "object",

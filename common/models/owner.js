@@ -11,12 +11,12 @@
  	"id" : {
 
       "type" : "string",
-      "id" : "true"
+      "id" : true
   },
 
  	"username": {
       "type": "string",
-      "id": true,
+      "id": false,
       "required": true,      
       "isArray": false,
       "unique" :true
@@ -122,6 +122,15 @@
     "email": {
       "type": "string",
       "required": false
+    },
+    
+    "employee_list" : {
+      "type": [
+        "object"
+      ],
+      "required": false,
+      "index": true,
+      "isArray": true
     }
   
 

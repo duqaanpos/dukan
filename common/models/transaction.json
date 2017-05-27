@@ -10,9 +10,13 @@
       "type": "string",
       "required": true
     },
+    "txn_amount" : {
+      "type" : "number",
+      "required" : true
+    },
     "cust_id": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "txn_details": {
       "type": "object",
@@ -21,7 +25,16 @@
     "timestamp": {
       "type": "number",
       "required": true
+    },
+    "mode_of_payment" : {
+      "type" : "string",
+      "required" : true
+    },
+    "employee" : {
+      "type" : "object",
+      "required" : true
     }
+
   },
   "validations": [],
   "relations": {},

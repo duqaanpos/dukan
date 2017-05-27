@@ -80,6 +80,7 @@
       "index": true      
     },
     "service_list": {
+      "id" : "true",
       "type": [
         "object"
       ],
@@ -111,7 +112,7 @@
       "required": false,
       "isArray": false
     },
-    "credit_totoal": {
+    "credit_total": {
       "type": "number",
       "id":false,
       "required": false,
@@ -120,12 +121,48 @@
     "email": {
       "type": "string",
       "required": false
+    },
+    "emp_id": {
+      "type": "string",
+      "required": true
+    },
+    "ownerId" : {
+      "type" : "string"
+
+    },
+    "mobile": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "txn_amount" :{
+      "type" : "number",
+      "required" : true
+    },
+
+    "employee_list" : {
+      "type": [
+        "object"
+      ],
+      "required": false,
+      "index": true,
+      "isArray": true
     }
+
   },
   
   
   "validations": [],
-  "relations": {},
+  "relations": {
+
+  },
   "acls": [],
   "methods": {}
 }
