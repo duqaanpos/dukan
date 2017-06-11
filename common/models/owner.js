@@ -74,12 +74,8 @@
       "unique" : false
     },    
     "buisness_details": {
-      "type": [
-        "object"
-      ],
-      "required": false,
-      "index": true,
-      "isArray": true
+      "type":"object",      
+      "required": false
     },
     "service_list": {
       "type": [
@@ -113,10 +109,9 @@
       "required": false,
       "isArray": false
     },
-    "credit_totoal": {
-      "type": "number",
-      "id":false,
-      "required": false,
+    "credit_total": {
+      "type": "number",      
+      "required": true,
       "isArray": false
     },
     "email": {
@@ -132,9 +127,8 @@
       "index": true,
       "isArray": true
     }
-  
 
-   });
+});
 
 /*
 userSchema.pre('save', function(next) {
@@ -169,7 +163,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 
 */
-
+mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://duqaandb:duqaandb@ds031257.mlab.com:31257/duqaandb');
  console.log("mongoose connected");
  var owner = mongoose.model('owner', userSchema);

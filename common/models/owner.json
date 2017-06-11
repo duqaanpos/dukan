@@ -7,15 +7,15 @@
   },
   "properties": {
     
-    "id" : {
+    
+
+  "id" : {
 
       "type" : "string",
-      "id" : "true",
-      "description" : "User Id"
+      "id" : true
+  },
 
-    },
-
-    "username": {
+  "username": {
       "type": "string",
       "id": false,
       "required": true,      
@@ -75,12 +75,10 @@
       "unique" : false
     },    
     "buisness_details": {
-      "type": "object",
-      "required": false,
-      "index": true      
-    },
+      "type":"object",
+      "required": false  
+   },
     "service_list": {
-      "id" : "true",
       "type": [
         "object"
       ],
@@ -113,8 +111,7 @@
       "isArray": false
     },
     "credit_total": {
-      "type": "number",
-      "id":false,
+      "type": "number",      
       "required": false,
       "isArray": false
     },
@@ -122,31 +119,7 @@
       "type": "string",
       "required": false
     },
-    "emp_id": {
-      "type": "string",
-      "required": true
-    },
-    "ownerId" : {
-      "type" : "string"
-
-    },
-    "mobile": {
-      "type": "string",
-      "required": true
-    },
-    "name": {
-      "type": "string",
-      "required": true
-    },
-    "email": {
-      "type": "string",
-      "required": true
-    },
-    "txn_amount" :{
-      "type" : "number",
-      "required" : true
-    },
-
+    
     "employee_list" : {
       "type": [
         "object"
@@ -156,8 +129,7 @@
       "isArray": true
     }
 
-  },
-  
+  },  
   
   "validations": [],
   "relations": {

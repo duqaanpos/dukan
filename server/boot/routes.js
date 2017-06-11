@@ -6,8 +6,8 @@
 module.exports = function(app) {
   
   var User = app.models.owner;
-  var transaction = app.models.transaction;
-  var customer = app.models.customer;
+  var Transaction = require('../../common/models/transaction.js');
+  var Customer = require('../../common/models/customer.js');
  // var employee =  app.models.employee;
   var bodyParser = require('body-parser');  
   var passport  = require('passport');
@@ -17,16 +17,20 @@ module.exports = function(app) {
   var mongoose = require('mongoose');
 //  var hash = require("password-hash");
   var crypto = require("crypto");
+  var mongoose = require("mongoose");
+  mongoose.Promise = require('bluebird');
 
 
   var bcrypt = require('bcryptjs');
   var SALT_WORK_FACTOR = 10;
   const uuidV1 = require('uuid/v1');
+  var   uuidv4 = require('uuid-v4');
   var buisness_flag = true;  
-
+  
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   app.use(passport.initialize());
+
 
   
   app.post('/signup', function(req, res) {
@@ -35,7 +39,7 @@ module.exports = function(app) {
     // Hash the password with the salt
     var hash = bcrypt.hashSync(req.body.password, salt);
 
-    var _id = uuidV1(); 
+    var _id = uuidv4(); 
 
       var newUser = new User({
       id : _id,
@@ -51,8 +55,8 @@ module.exports = function(app) {
       service_list : [],
       monthly_total : 0,
       daily_total : 0,
-      annual_total : 0
-	
+      annual_total : 0,
+      credit_total : 0	
 
     }); // Generate a salt
 
@@ -128,12 +132,6 @@ app.post('/authenticate' , function(req,res) {
  var flag = true;
  var authUser = {};
 
- // var salt = bcrypt.genSaltSync(10);
-    // Hash the password with the salt
-   //var hash1 = bcrypt.hashSync(req.body.password, salt);
-
-  // console.log(hash1);
-
    console.log(req.body.username);
 
    User.find({username:req.body.username.toLowerCase()}, function (err, user) {
@@ -184,6 +182,14 @@ app.post('/authenticate' , function(req,res) {
 
 app.post('/business' , function(req,res) { 
 
+  var employee_list = req.body.employee_list;
+    
+    for(i=0;i < employee_list.length;i++) {
+      console.log(employee_list[i]);
+      console.log(uuidv4());
+       employee_list[i].id = uuidv4();
+    }
+ 
 
   var buisness_details = {
 
@@ -191,61 +197,41 @@ app.post('/business' , function(req,res) {
       retailer_type : req.body.retailer_type,
       sell_type : req.body.sell_type,
       buisness_owner : req.body.buisness_owner,
-      people_no : req.body.people_no,
+      employee_list : req.body.employee_list,
       buisness_age : req.body.buisness_age,
       buisness_track : req.body.buisness_track,
       buisness_interest : req.body.buisness_interest
 
   }
 
-
   User.findById(req.body.id, function (err, user) {
-  if (err) return handleError(err);
+  if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
 
   console.log(user);
   
   user.buisness_details = buisness_details;
+  user.employee_list = req.body.employee_list;
   buisness_flag = true;
   user.save(function (err, updatedUser) {
-    if (err) return handleError(err);
+    if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
     res.send({success : true,msg: 'buisness details have been saved',status:'1'})
   });
 
   });
  
- 
-
 });
-
 
 app.post('/serviceRegister', function(req,res) {
 
  var _id = uuidV1(); 
-/*
-      var newService = new Services({
-      id : _id,
-      category : req.body.category,
-      sub_category1 : req.body.sub_category1,
-      sub_category2 : req.body.sub_category2,
-      rate :req.body.rate,
-      volume : req.body.volume
-    }); // Generate a salt
-      
-    // save 
-    newService.save(function(err, createdServiceObject) {
-      if (err) {
-        console.log("err in signup", err);
-        if(err.code == 11000)
-          return res.send("duplicate key error")
-        else
-        return res.send(err);
-      }
-//    res.json({service:createdServiceObject,_id : _id,success: true, msg: 'service created',status : "1"});
-    }); 
-*/
-
-  
-  var service =  {
+ 
+ var service =  {
       id : _id,
       category : req.body.category,
       sub_category1 : req.body.sub_category1,
@@ -253,8 +239,7 @@ app.post('/serviceRegister', function(req,res) {
       rate :req.body.rate,
       volume : req.body.volume
 
-    }
-   
+    }  
 
 
   User.findById(req.body.id, function (err, user) {
@@ -266,10 +251,7 @@ app.post('/serviceRegister', function(req,res) {
     if(!user) {
     return res.status(404).send({success: false, msg: 'username not found',status:'0'});
     }
-
-   console.log(user); 
-
-    
+  // console.log(user);    
 
    if(user.service_list == [])  
     user.service_list = [service];
@@ -277,18 +259,15 @@ app.post('/serviceRegister', function(req,res) {
     user.service_list.push(service);
 
 
-  user.save(function (err, updatedUser) {
-     if(err) {
-      console.log(err);
-      return res.status(500).send("err");
-    }
+    user.save(function (err, updatedUser) {
+       if(err) {
+          console.log(err);
+          return res.status(500).send("err");
+        }
+     res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+    });
 
-    res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
   });
-
-  });
-
-
 
 });
 
@@ -307,11 +286,8 @@ app.post('/servicelist',function(req,res) {
     }
 
  res.send({success : true, service_list:user.service_list,msg: 'service list',status:'1'})
-  
-
-
-
-});
+ 
+  });
 
 
 });
@@ -319,25 +295,110 @@ app.post('/servicelist',function(req,res) {
 
 app.post('/transaction', function(req,res) {
 
-  var _id = uuidV1(); 
+  var txn_amount =req.body.totalBill;
+  var txn_id = uuidv4(); 
+ // console.log(txn_id);
+  var cust_id = uuidv4();
+ // console.log(cust_id);
 
+ var id = mongoose.Types.ObjectId();
+ var ObjectID = require('mongodb').ObjectID;
+ console.log(id);
+ var ifCustomerExists = "false";
 
-  var newTransaction = new transaction({
-      id : _id,
-      uid : req.body.uid,
-      txn_amount : req.body.txn_amount,
-      cust_id : req.body.cust_id,
-      timestamp : req.body.timestamp,
-      txn_details : req.body.txn_details,
-      employee : req.body.employee,
-      mode_of_payment : req.body.mode_of_payment
+  var newTransaction = new Transaction({
+      _id : txn_id,
+      user_id : req.body.id,
+      itemsList : req.body.itemsList,
+      txn_amount : req.body.totalBill,
+      cust_id : cust_id,
+      timestamp : req.body.timestamp,      
+      emp_id : req.body.employee.emp_id,
+      mode_of_payment : req.body.mode_of_payment,
+      payableAmount : req.body.payableAmount,
+      discount : req.body.discount,
+      totalBill : req.body.totalBill,
+      payByCash : req.body.payByCash,
+      payByCredit : req.body.payByCredit
 
     });
 
-  if(req.body.mode_of_payment == "credit")
-    // save credit to total credit of customer and User
 
-  
+
+  var newCustomer = new Customer({
+    _id : id,
+    txn_id : txn_id,
+    cust_name : req.body.customerInfo.name,
+    contact_no : req.body.customerInfo.contact_no,
+    age : req.body.customerInfo.age,
+    gender : req.body.customerInfo.gender,
+    totalCredit : 0    
+
+  });
+
+  Customer.findOne(
+      {"contact_no" : req.body.customerInfo.contact_no})         
+      .then(function(person){
+
+    if(person){
+        ifCustomerExists = "true";
+      //  console.log(ifCustomerExists);        
+        person.totalCredit = person.totalCredit + req.body.payByCredit;
+     //   console.log(person.totalCredit);
+        person.save(function (err, updatedperson) {
+          if(err) {
+            console.log(err);
+            return res.status(500).send("err");
+         }
+        // console.log(updatedperson);    
+      }); 
+    }
+
+   if(ifCustomerExists == "false") {
+
+    newCustomer.save() 
+    .then(function(createdCustomerObject){
+     // console.log("createdCustomerObject");
+     // console.log(createdCustomerObject);
+
+       if(createdCustomerObject) {
+        Customer.findById(id, function(err, customer) {   
+
+        if(err) {
+        console.log(err);
+        return res.status(500).send("err");
+        }
+    //    console.log("in customer by id");
+      //  console.log(customer);   
+
+
+      if(!customer) {
+       return res.status(404).send({success: false, msg: 'customer not found',status:'0'});
+      }
+
+       if(req.body.mode_of_payment == 'credit') {
+
+        customer.totalCredit = customer.totalCredit + req.body.payByCredit;
+      
+      //  console.log(customer.totalCredit);
+
+       customer.save(function (err, updatedCustomer) {
+          if(err) {
+            console.log(err);
+            return res.status(500).send("err");
+         }
+       //  console.log(updatedCustomer);
+    //  res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+       }); 
+      }     
+      
+       }); 
+      }
+    });
+  }
+});
+
+    
   User.findById(req.body.id, function (err, user) {
    if(err) {
       console.log(err);
@@ -348,32 +409,34 @@ app.post('/transaction', function(req,res) {
     return res.status(404).send({success: false, msg: 'username not found',status:'0'});
     }
 
-   console.log(user);    
+ //  console.log(user);    
 
    user.daily_total += txn_amount;
    user.monthly_total += txn_amount;
+
+   if(req.body.mode_of_payment == 'credit') 
+      user.credit_total = user.credit_total + req.body.payByCredit;
+    console.log(user.credit_total);
    
    user.employee_list.forEach(function(employee) {
 
-    if(req.body.employee.empId == employee.empId)
-      employee.txn_amount += req.body.txn_amount;
+    if(req.body.employee.emp_id == employee.emp_id)
+      employee.txn_amount += txn_amount;
 
-   });
-
-   
+   });  
 
 
-  user.save(function (err, updatedUser) {
-     if(err) {
-      console.log(err);
-      return res.status(500).send("err");
-    }
+    user.save(function (err, updatedUser) {
+       if(err) {
+        console.log(err);
+        return res.status(500).send("err");
+     }
 
-    res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+   //  console.log(updatedUser);
+  //  res.send({success : true,user:updatedUser,msg: 'service is being saved',status:'1'})
+    });
+
   });
-
-  });
- 
 
   newTransaction.save(function(err, createdTransObject) {
       if (err) {
@@ -383,13 +446,10 @@ app.post('/transaction', function(req,res) {
         else
         return res.send(err);
       } 
-
-
      
-     res.json({user:createdTransObject,_id : _id,success: true, msg: 'Transaction saved',status : "1"});
+     res.json({user:createdTransObject,success: true, msg: 'Transaction saved',status : "1"});
 
-  }); 
-
+  });
 
 
 });  
@@ -410,10 +470,41 @@ app.post('/employeelist',function(req,res) {
 
  res.send({success : true, employee_list:user.employee_list,msg: 'employee list',status:'1'})
   
-
-
+    });
 
 });
+
+app.post('/customerInfo', function(req,res) {
+
+  
+  var cust_id = uuidV1();
+
+  var newCustomer = new customer({
+    id : cust_id,
+    txn_id : req.body.txn_id,
+    cust_name : req.body.name,
+    contact_no : req.body.contact_no,
+    age : req.body.age,
+    gender : req.body.gender,
+    totalCredit : 0
+
+  });
+
+  newCustomer.save(function(err, createdCustomerObject) {
+    
+        if (err) {
+        console.log("err in signup", err);
+        if(err.code == 11000)
+          return res.send("duplicate key error")
+        else
+        return res.send(err);
+      }      
+     res.json({user:createdCustomerObject,success: true, msg: 'Customer saved',status : "1"});
+
+  }); 
+
+
+
 
 });
 

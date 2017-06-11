@@ -1,12 +1,19 @@
 {
   "name": "transaction",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "uid": {
+
+    "_id" : {
+
+      "type" : "string",
+      "id" : "true"
+    },
+
+    "user_id": {
       "type": "string",
       "required": true
     },
@@ -18,7 +25,7 @@
       "type": "string",
       "required": false
     },
-    "txn_details": {
+    "itemsList": {
       "type": "object",
       "required": true
     },
@@ -28,10 +35,26 @@
     },
     "mode_of_payment" : {
       "type" : "string",
-      "required" : true
+      "required" : false
     },
-    "employee" : {
-      "type" : "object",
+    "emp_id" : {
+      "type" : "string",
+      "required" : true
+    },        
+    "payByCash" : {
+      "type" : "number",
+      "required" : false
+    },
+    "payByCredit" : {
+      "type" : "number",
+      "required" :false
+    },
+    "totalBill" : {
+      "type" : "number",
+      "required" : false
+    },
+    "discount" : {
+      "type" : "number",
       "required" : true
     }
 

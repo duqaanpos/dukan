@@ -6,8 +6,8 @@ var Schema = mongoose.Schema;
 var transactionSchema = new Schema({
 
 
-	 "id" : {
-
+	 "_id" : {
+ 
       "type" : "string",
       "id" : "true"
   	},
@@ -15,7 +15,7 @@ var transactionSchema = new Schema({
       "type" : "number",
       "required" : true
     },
-	"uid": {
+	"user_id": {
     "type": "string",
      "required": true
     },
@@ -23,9 +23,9 @@ var transactionSchema = new Schema({
       "type": "string",
       "required": false
     },
-    "txn_details": {
+    "itemsList": {
       "type": "object",
-      "required": false
+      "required": true
     },
     "timestamp": {
       "type": "number",
@@ -35,9 +35,29 @@ var transactionSchema = new Schema({
       "type" : "string",
       "required" : true
     },
-    "employee" : {
-      "type" : "object",
-      "required" : true
+    "emp_id" : {
+      "type" : "string",
+      "required" : false
+    },        
+    "payByCash" : {
+    	"type" : "number",
+    	"required" : false
+    },
+    "payByCredit" : {
+    	"type" : "number",
+    	"required" : false
+    },
+    "totalBill" : {
+    	"type" : "number",
+    	"required" : true
+    },
+    "discount" : {
+    	"type" : "number",
+    	"required" : false
+    },
+    "payableAmount" : {
+    	"type" : "number",
+    	"required" : false
     }
 
  });

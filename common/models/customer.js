@@ -3,13 +3,10 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
+
 var customerSchema = new Schema({
 
-	 "id" : {
-
-      "type" : "string",
-      "id" : true
-  	}, 
+	
 
   	"cust_name": {
       "type": "string",
@@ -17,15 +14,29 @@ var customerSchema = new Schema({
     },
     "contact_no": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "totalCredit": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "email": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+
+    "age" : {
+      "type" : "number",
+      "required" : false
+    },
+    "gender" : {
+      "type" : "string",
+      "required" : false
+    },
+    "txn_id" : {
+    	"type" : "string",
+    	"required" : false
+
     }
     
    });

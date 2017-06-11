@@ -1,41 +1,39 @@
 {
-  "name": "customer",
+  "name": "employee",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {
-
-    "cust_name": {
+  "properties": {    
+  "id" : {
+      "type" : "string",
+      "id" : "true"
+   },
+    "employeeName": {
       "type": "string",
       "required": true
     },
-    "contact_no": {
+    "contact_no" : {
       "type": "number",
-      "required": true
+      "required": true 
     },
-    "totalCredit": {
+     "discount": {
       "type": "number",
       "required": false
     },
-    "email": {
+    "totalBill": {
       "type": "string",
       "required": true
     },
-    "age" : {
+    "payByCash": {
+      "type": "number",
+      "required": false
+    },
+    "payByCredit" : {
       "type" : "number",
-      "required" : false
-    },
-    "gender" : {
-      "type" : "string",
-      "required" : false
-    },
-    "txn_id" : {
-      "type" : "string",
-      "required" : false
-
-    }
+      "required" :false
+    }  
   },
   "validations": [],
   "relations": {},
