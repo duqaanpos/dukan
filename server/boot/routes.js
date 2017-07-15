@@ -296,6 +296,8 @@ app.post('/servicelist',function(req,res) {
    cat = "beard"
    else if (req.body.category == "face")
    cat = "face"
+   else if (req.body.category == "nails")
+   cat = "nails"
    else if (req.body.category == "body")
    cat = "body"
    else
