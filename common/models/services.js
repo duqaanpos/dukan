@@ -12,11 +12,7 @@ var serviceSchema = new Schema({
       "type": "object",
       "required": true
     },
-    "sub_category1": {
-      "type": "object",
-      "required": false
-    },
-    "sub_category2": {
+    "sub_category": {
       "type": "object",
       "required": false
     },
@@ -35,5 +31,5 @@ var serviceSchema = new Schema({
  //console.log("mongoose connected");
  var services = mongoose.model('services', serviceSchema);
 
- 
+
 module.exports  = services;
