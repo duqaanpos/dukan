@@ -97,13 +97,31 @@
       "required": false,
       "isArray": false
     },
+    "monthly_orders": {
+      "type": "number",
+      "id": false,
+      "required": false,
+      "isArray": false
+    },
     "daily_total": {
       "type": "number",
       "id": false,
       "required": false,
       "isArray": false
     },
+    "daily_orders": {
+      "type": "number",
+      "id": false,
+      "required": false,
+      "isArray": false
+    },
     "annual_total": {
+      "type": "number",
+      "id": false,
+      "required": false,
+      "isArray": false
+    },
+    "annual_orders": {
       "type": "number",
       "id": false,
       "required": false,

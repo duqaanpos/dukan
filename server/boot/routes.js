@@ -54,8 +54,11 @@ module.exports = function(app) {
       pincode : req.body.pincode,
       service_list : [],
       monthly_total : 0,
+      monthly_orders : 0,
       daily_total : 0,
+      daily_orders : 0,
       annual_total : 0,
+      annual_orders : 0,
       credit_total : 0
 
     }); // Generate a salt
@@ -170,7 +173,7 @@ app.post('/authenticate' , function(req,res) {
 
     if(!flag)
        return res.send({success : true,buisness_flag : buisness_flag,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
-      else return res.send({success: false,buisness_flag :buisness_flag, msg: 'password not matched',status:'0'});
+      else return res.send({success: false,buisness_flag :buisness_flag, msg: 'password does not match',status:'0'});
 
   });
 
@@ -285,7 +288,7 @@ app.post('/servicelist',function(req,res) {
     }
 
   if(!user) {
-    return res.status(404).send({success: false, msg: 'id does not matched',status:'0'});
+    return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
     }
 
  if (req.body.category){
@@ -444,6 +447,10 @@ app.post('/transaction', function(req,res) {
 
    user.daily_total += txn_amount;
    user.monthly_total += txn_amount;
+   user.annual_total += txn_amount;
+   user.daily_orders += 1;
+   user.monthly_orders += 1;
+   user.annual_orders += 1;
 
    if(req.body.mode_of_payment == 'credit')
       user.credit_total = user.credit_total + req.body.payByCredit;
@@ -496,7 +503,7 @@ app.post('/employeelist',function(req,res) {
     }
 
   if(!user) {
-    return res.status(404).send({success: false, msg: 'id does not matched',status:'0'});
+    return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
     }
 
  res.send({success : true, employee_list:user.employee_list,msg: 'employee list',status:'1'})
@@ -539,5 +546,19 @@ app.post('/customerInfo', function(req,res) {
 
 });
 
+app.post('/home_screen', function(req,res) {
+  
+  User.findById(req.body.id, function (err, user) {
+     if(err) {
+        console.log(err);
+        return res.status(500).send("err");
+      }
 
+    if(!user) {
+      return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
+      }
+    res.send({success : true, daily_total:user.daily_total, daily_orders:user.daily_orders, monthly_total:user.monthly_total, monthly_orders:user.monthly_orders, annual_total:user.annual_total, annual_orders:user.annual_orders, msg: 'home screen details',status:'1'})
+
+  });
+ });
 }
