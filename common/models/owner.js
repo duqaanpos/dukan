@@ -1,11 +1,11 @@
 'use strict';
- 
+
 
  var mongoose = require("mongoose");
  var Schema = mongoose.Schema;
  var bcrypt = require("bcryptjs");
  var SALT_WORK_FACTOR = 10;
- 
+
  var userSchema = new Schema({
 
  	"id" : {
@@ -17,7 +17,7 @@
  	"username": {
       "type": "string",
       "id": false,
-      "required": true,      
+      "required": true,
       "isArray": false,
       "unique" :true
     },
@@ -72,9 +72,9 @@
       "id" : false,
       "required" : true,
       "unique" : false
-    },    
-    "buisness_details": {
-      "type":"object",      
+    },
+    "business_details": {
+      "type":"object",
       "required": false
     },
     "service_list": {
@@ -91,44 +91,12 @@
       "index": true,
       "isArray": false
     },
-    "monthly_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "monthly_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "daily_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "daily_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "annual_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "annual_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
+    "sales" :{
+      "type":"object",
+      "required": false
     },
     "credit_total": {
-      "type": "number",      
+      "type": "number",
       "required": true,
       "isArray": false
     },
@@ -136,7 +104,7 @@
       "type": "string",
       "required": false
     },
-    
+
     "employee_list" : {
       "type": [
         "object"
@@ -186,8 +154,5 @@ mongoose.connect('mongodb://duqaandb:duqaandb@ds031257.mlab.com:31257/duqaandb')
  console.log("mongoose connected");
  var owner = mongoose.model('owner', userSchema);
 
- 
-module.exports  = owner;  	 
 
-
-
+module.exports  = owner;

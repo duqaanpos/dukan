@@ -25,7 +25,7 @@ module.exports = function(app) {
   var SALT_WORK_FACTOR = 10;
   const uuidV1 = require('uuid/v1');
   var   uuidv4 = require('uuid-v4');
-  var buisness_flag = true;
+  var business_flag = true;
 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -53,12 +53,17 @@ module.exports = function(app) {
       city : req.body.city,
       pincode : req.body.pincode,
       service_list : [],
-      monthly_total : 0,
-      monthly_orders : 0,
-      daily_total : 0,
-      daily_orders : 0,
-      annual_total : 0,
-      annual_orders : 0,
+      sales :{
+        day:0,
+        month:0,
+        year:0,
+        daily_total : 0,
+        daily_orders : 0,
+        monthly_total : 0,
+        monthly_orders : 0,
+        annual_total : 0,
+        annual_orders : 0
+      },
       credit_total : 0
 
     }); // Generate a salt
@@ -75,7 +80,7 @@ module.exports = function(app) {
       }
 
 
-     buisness_flag = false;
+     business_flag = false;
      res.json({user:createdUserObject,_id : _id,success: true, msg: 'user is being registered',status : "1"});
 
      });
@@ -172,8 +177,8 @@ app.post('/authenticate' , function(req,res) {
     });
 
     if(!flag)
-       return res.send({success : true,buisness_flag : buisness_flag,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
-      else return res.send({success: false,buisness_flag :buisness_flag, msg: 'password does not match',status:'0'});
+       return res.send({success : true,business_flag : business_flag,user:authUser,_id : authUser.id,msg: 'login Successful',status:'1'});
+      else return res.send({success: false,business_flag :business_flag, msg: 'password does not match',status:'0'});
 
   });
 
@@ -194,16 +199,16 @@ app.post('/business' , function(req,res) {
     }
 
 
-  var buisness_details = {
+  var business_details = {
 
       store_name : req.body.storename,
       retailer_type : req.body.retailer_type,
       sell_type : req.body.sell_type,
-      buisness_owner : req.body.buisness_owner,
+      business_owner : req.body.business_owner,
       employee_list : req.body.employee_list,
-      buisness_age : req.body.buisness_age,
-      buisness_track : req.body.buisness_track,
-      buisness_interest : req.body.buisness_interest
+      business_age : req.body.business_age,
+      business_track : req.body.business_track,
+      business_interest : req.body.business_interest
 
   }
 
@@ -215,15 +220,15 @@ app.post('/business' , function(req,res) {
 
   console.log(user);
 
-  user.buisness_details = buisness_details;
+  user.business_details = business_details;
   user.employee_list = req.body.employee_list;
-  buisness_flag = true;
+  business_flag = true;
   user.save(function (err, updatedUser) {
     if(err) {
       console.log(err);
       return res.status(500).send("err");
     }
-    res.send({success : true,msg: 'buisness details have been saved',status:'1'})
+    res.send({success : true,msg: 'business details have been saved',status:'1'})
   });
 
   });
@@ -231,7 +236,7 @@ app.post('/business' , function(req,res) {
 });
 
 app.post('/serviceRegister', function(req,res) {
-
+console.log(req.body)
   User.findById(req.body.id, function (err, user) {
    if(err) {
       console.log(err);
@@ -445,12 +450,45 @@ app.post('/transaction', function(req,res) {
 
  //  console.log(user);
 
-   user.daily_total += txn_amount;
-   user.monthly_total += txn_amount;
-   user.annual_total += txn_amount;
-   user.daily_orders += 1;
-   user.monthly_orders += 1;
-   user.annual_orders += 1;
+   var dateObj = new Date();
+   var month = dateObj.getUTCMonth() + 1; //months from 1-12
+   var day = dateObj.getUTCDate();
+   var year = dateObj.getUTCFullYear();
+   console.log(day,month,year);
+   console.log(user.daily_total);
+   if(user.sales.day == day)
+     {
+       user.sales.daily_orders += 1;
+       user.sales.daily_total += txn_amount;
+     }
+   else
+    {
+       user.sales.day = day;
+       user.sales.daily_orders = 1;
+       user.sales.daily_total = txn_amount;
+     }
+   if(user.sales.month == month)
+     {
+       user.sales.monthly_orders += 1;
+       user.sales.monthly_total += txn_amount;
+     }
+   else
+     {
+        user.sales.month = month;
+        user.sales.monthly_orders = 1;
+        user.sales.monthly_total = txn_amount;
+     }
+   if(user.sales.year == year)
+     {
+       user.sales.annual_orders += 1;
+       user.sales.annual_total += txn_amount;
+     }
+   else
+     {
+       user.sales.year = year;
+       user.sales.annual_orders = 1;
+       user.sales.annual_total = txn_amount;
+     }
 
    if(req.body.mode_of_payment == 'credit')
       user.credit_total = user.credit_total + req.body.payByCredit;
@@ -547,7 +585,7 @@ app.post('/customerInfo', function(req,res) {
 });
 
 app.post('/home_screen', function(req,res) {
-  
+
   User.findById(req.body.id, function (err, user) {
      if(err) {
         console.log(err);
@@ -557,7 +595,14 @@ app.post('/home_screen', function(req,res) {
     if(!user) {
       return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
       }
-    res.send({success : true, daily_total:user.daily_total, daily_orders:user.daily_orders, monthly_total:user.monthly_total, monthly_orders:user.monthly_orders, annual_total:user.annual_total, annual_orders:user.annual_orders, msg: 'home screen details',status:'1'})
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    var year = dateObj.getUTCFullYear();
+    console.log(day,month,year);
+    console.log(user.sales.daily_total);
+    console.log(user.sales.monthly_total);
+    res.send({success : true, daily_total:user.sales.daily_total, daily_orders:user.sales.daily_orders, monthly_total:user.sales.monthly_total, monthly_orders:user.sales.monthly_orders, annual_total:user.sales.annual_total, annual_orders:user.sales.annual_orders, msg: 'home screen details',status:'1'})
 
   });
  });

@@ -1,4 +1,4 @@
-use strict';
+'use strict';
 
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
@@ -15,12 +15,12 @@ var employeeSchema = new Schema({
     },
     "contact_no" : {
       "type": "number",
-      "required": true 
+      "required": true
     },
     "payableAmount"
     "contact_no": {
       "type": "number",
-      "required": true      
+      "required": true
     },
     "discount": {
       "type": "number",
@@ -38,11 +38,11 @@ var employeeSchema = new Schema({
       "type" : "number",
       "required" :false
     }
-    
+
    });
 
 // console.log("mongoose connected in employee");
  var employee = mongoose.model('customer', employeeSchema);
 
- 
+
 module.exports  = employee;

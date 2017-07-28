@@ -6,8 +6,8 @@
     "validateUpsert": true
   },
   "properties": {
-    
-    
+
+
 
   "id" : {
 
@@ -18,7 +18,7 @@
   "username": {
       "type": "string",
       "id": false,
-      "required": true,      
+      "required": true,
       "isArray": false,
       "unique" :true
     },
@@ -73,10 +73,10 @@
       "id" : false,
       "required" : true,
       "unique" : false
-    },    
-    "buisness_details": {
+    },
+    "business_details": {
       "type":"object",
-      "required": false  
+      "required": false
    },
     "service_list": {
       "type": [
@@ -92,44 +92,12 @@
       "index": true,
       "isArray": false
     },
-    "monthly_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "monthly_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "daily_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "daily_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "annual_total": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
-    },
-    "annual_orders": {
-      "type": "number",
-      "id": false,
-      "required": false,
-      "isArray": false
+    "sales" : {
+      "type":"object",
+      "required": false
     },
     "credit_total": {
-      "type": "number",      
+      "type": "number",
       "required": false,
       "isArray": false
     },
@@ -137,7 +105,7 @@
       "type": "string",
       "required": false
     },
-    
+
     "employee_list" : {
       "type": [
         "object"
@@ -147,8 +115,8 @@
       "isArray": true
     }
 
-  },  
-  
+  },
+
   "validations": [],
   "relations": {
 

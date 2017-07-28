@@ -28,7 +28,7 @@ var transactionSchema = new Schema({
       "required": true
     },
     "timestamp": {
-      "type": "number",
+      "type": "string",
       "required": true
     },
     "mode_of_payment" : {

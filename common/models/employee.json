@@ -5,7 +5,7 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {    
+  "properties": {
   "id" : {
       "type" : "string",
       "id" : "true"
@@ -16,7 +16,7 @@
     },
     "contact_no" : {
       "type": "number",
-      "required": true 
+      "required": true
     },
      "discount": {
       "type": "number",
@@ -33,7 +33,7 @@
     "payByCredit" : {
       "type" : "number",
       "required" :false
-    }  
+    }
   },
   "validations": [],
   "relations": {},
