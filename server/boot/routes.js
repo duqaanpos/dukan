@@ -195,7 +195,8 @@ app.post('/business' , function(req,res) {
     for(i=0;i < employee_list.length;i++) {
       console.log(employee_list[i]);
       console.log(uuidv4());
-       employee_list[i].id = uuidv4();
+       employee_list[i].emp_id = uuidv4();
+       employee_list[i].txn_amount = 0;
     }
 
 
@@ -314,8 +315,8 @@ app.post('/servicelist',function(req,res) {
    var service_list1
    var service_list = [] //= user.service_list //= user.service_list[1]
    var i=j=0
-   console.log (cat)
-   console.log(service_list)
+   //console.log (cat)
+   //console.log(service_list)
    for(i = 0; i < user.service_list.length ; i++){
      if (user.service_list[i].category == cat){
        service_list.push(user.service_list[i])
@@ -494,8 +495,9 @@ app.post('/transaction', function(req,res) {
       user.credit_total = user.credit_total + req.body.payByCredit;
     console.log(user.credit_total);
 
+  console.log(req.body.employee);
    user.employee_list.forEach(function(employee) {
-
+    console.log(employee);
     if(req.body.employee.emp_id == employee.emp_id)
       employee.txn_amount += txn_amount;
 
@@ -543,12 +545,89 @@ app.post('/employeelist',function(req,res) {
   if(!user) {
     return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
     }
+    var employee_list = [];
 
- res.send({success : true, employee_list:user.employee_list,msg: 'employee list',status:'1'})
+    for(i=0;i < user.employee_list.length;i++) {
+       if(user.employee_list[i].txn_amount != -1)
+         employee_list.push(user.employee_list[i]);
+    }
+
+ res.send({success : true, employee_list:employee_list,msg: 'employee list',status:'1'})
 
     });
 
 });
+
+
+app.post('/employee_add' , function(req,res) {
+  var employee_list = req.body.employee_list;
+
+  for(i=0;i < employee_list.length;i++) {
+    //  console.log(employee_list[i]);
+      //console.log(uuidv4());
+       employee_list[i].emp_id = uuidv4();
+       employee_list[i].txn_amount = 0;
+
+  }
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+//console.log(user);
+    if(!user) {
+    return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+    for(i=0;i < employee_list.length;i++) {
+        //console.log(employee_list[i]);
+        user.employee_list.push(employee_list[i]);
+        console.log(business_flag);
+        if(business_flag)
+          user.business_details.employee_list.push(employee_list[i]);
+  }
+  //console.log(user);
+
+    user.save(function (err, updatedUser) {
+       if(err) {
+          console.log(err);
+          return res.status(500).send("err");
+        }
+    res.send({success : true, employee_list:updatedUser.employee_list,msg: 'updated employee list',status:'1'})
+    });
+  });
+});
+
+
+app.post('/employee_rm' , function(req,res) {
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+    //console.log(user);
+    if(!user) {
+       return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+    for(i=0;i < user.employee_list.length;i++) {
+        //console.log(user.employee_list[i]);
+        if(user.employee_list[i].emp_id == req.body.emp_id){
+            user.employee_list[i].txn_amount = -1;
+            if(business_flag)
+              user.business_details.employee_list[i].txn_amount = -1;
+            //console.log(user.employee_list[i]);
+        }
+    }
+    user.save(function (err, updatedUser) {
+       if(err) {
+          console.log(err);
+          return res.status(500).send("err");
+        }
+    res.send({success : true, employee_list:updatedUser.employee_list,msg: 'updated employee list',status:'1'})
+    });
+
+  });
+});
+
 
 app.post('/customerInfo', function(req,res) {
 
@@ -583,6 +662,9 @@ app.post('/customerInfo', function(req,res) {
 
 
 });
+
+
+
 
 app.post('/home_screen', function(req,res) {
 
