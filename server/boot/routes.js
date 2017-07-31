@@ -545,15 +545,26 @@ app.post('/employeelist',function(req,res) {
   if(!user) {
     return res.status(404).send({success: false, msg: 'id does not match',status:'0'});
     }
-    var employee_list = [];
 
+  if(req.body.emp_id){
+    //var employee_list = [];
     for(i=0;i < user.employee_list.length;i++) {
-       if(user.employee_list[i].txn_amount != -1)
-         employee_list.push(user.employee_list[i]);
+       if(user.employee_list[i].emp_id == req.body.emp_id)
+          return res.send({success : true, employee_details:user.employee_list[i],msg: 'employee details',status:'1'});
+
     }
+    return res.status(404).send({success : false,msg: 'No such employee',status:'0'});
+   }
+   else {
+     var employee_list = [];
 
- res.send({success : true, employee_list:employee_list,msg: 'employee list',status:'1'})
+     for(i=0;i < user.employee_list.length;i++) {
+        if(user.employee_list[i].txn_amount != -1)
+           employee_list.push(user.employee_list[i]);
+      }
 
+     res.send({success : true, employee_list:employee_list,msg: 'employee list',status:'1'})
+   }
     });
 
 });
