@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 var customerSchema = new Schema({
 
-	
+
 
   	"cust_name": {
       "type": "string",
@@ -37,13 +37,18 @@ var customerSchema = new Schema({
     	"type" : "string",
     	"required" : false
 
-    }
-    
+    },
+		"user_id" : {
+			"type" : "string",
+			"required" : false
+
+		}
+
    });
 
 //mongoose.connect('mongodb://duqaandb:duqaandb@ds031257.mlab.com:31257/duqaandb');
  //console.log("mongoose connected");
  var customer = mongoose.model('customer', customerSchema);
 
- 
+
 module.exports  = customer;

@@ -367,6 +367,7 @@ app.post('/transaction', function(req,res) {
 
   var newCustomer = new Customer({
     _id : id,
+    user_id : req.body.id,
     txn_id : txn_id,
     cust_name : req.body.customerInfo.name,
     contact_no : req.body.customerInfo.contact_no,
@@ -532,6 +533,49 @@ app.post('/transaction', function(req,res) {
 
 });
 
+app.post('/transactionlist', function(req,res) {
+
+  if (req.body.emp_id){
+    Transaction.find({"user_id" : req.body.id,
+                       "emp_id" : req.body.emp_id},
+                       function(err, transactionlist){
+      if(err) {
+         console.log('Employee Transactions');
+         console.log(err);
+         return res.status(500).send("err");
+       }
+      return res.send({success: true, 'Employee Transactions' : transactionlist, msg: 'Employee Transactions', status : '1'});
+    });
+  }
+  else if (req.body.cust_id)
+  {
+    Transaction.find({"user_id" : req.body.id,
+                       "cust_id" : req.body.cust_id},
+                       function(err, transactionlist){
+      if(err) {
+         console.log('Customer Transactions');
+         console.log(err);
+         return res.status(500).send("err");
+       }
+      return res.send({success: true, 'Customer Transactions' : transactionlist, msg: 'Customer Transactions', status : '1'});
+    });
+  }
+else
+{
+  Transaction.find({"user_id" : req.body.id}, function(err, transactionlist){
+    if(err) {
+       console.log('transactionlist');
+       console.log(err);
+       return res.status(500).send("err");
+     }
+    console.log(transactionlist);
+    return res.send({success: true, 'transactionist' : transactionlist, msg: 'Transaction List', status : '1'});
+  });
+}
+});
+
+
+
 
 app.post('/employeelist',function(req,res) {
 
@@ -639,6 +683,19 @@ app.post('/employee_rm' , function(req,res) {
   });
 });
 
+app.post('/customerinfo', function(req,res) {
+
+  Customer.findOne(
+      { "user_id": req.body.id,
+        "contact_no" : req.body.contact_no})
+      .then(function(person){
+        if (person)
+          return res.send({success: true, 'customerinfo' : person, msg: 'Customer Info', status : '1'});
+        else
+          return res.send({success: true, msg: 'No such customer', status : '1'});
+
+      });
+    });
 
 app.post('/customerInfo', function(req,res) {
 
@@ -647,6 +704,7 @@ app.post('/customerInfo', function(req,res) {
 
   var newCustomer = new customer({
     id : cust_id,
+    user_id : req.body.id,
     txn_id : req.body.txn_id,
     cust_name : req.body.name,
     contact_no : req.body.contact_no,
@@ -669,8 +727,20 @@ app.post('/customerInfo', function(req,res) {
 
   });
 
+});
 
 
+app.post('/customerlist', function(req,res) {
+  Customer.find({"user_id" : req.body.id}, function(err, customerlist){
+    if(err) {
+       console.log(err);
+       console.log('customerlist');
+       return res.status(500).send("err");
+     }
+    //console.log(customerlist);
+    return res.send({success: true, 'Customer List' : customerlist, msg: 'Customer List', status : '1'});
+    //customerlist.toArray(res);
+  });
 
 });
 

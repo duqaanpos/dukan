@@ -35,6 +35,11 @@
       "type" : "string",
       "required" : false
 
+    },
+    "user_id" : {
+      "type" : "string",
+      "required" : false
+
     }
   },
   "validations": [],
