@@ -571,7 +571,7 @@ else
     console.log(transactionlist);
     return res.send({success: true, 'transactionist' : transactionlist, msg: 'Transaction List', status : '1'});
   });
-}
+ }
 });
 
 
@@ -647,11 +647,39 @@ app.post('/employee_add' , function(req,res) {
           console.log(err);
           return res.status(500).send("err");
         }
-    res.send({success : true, employee_list:updatedUser.employee_list,msg: 'updated employee list',status:'1'})
+    res.send({success : true, employee_list:updatedUser.employee_list,msg: 'new employee list',status:'1'})
     });
   });
 });
 
+app.post('/employee_update' , function(req,res) {
+
+  User.findById(req.body.id, function (err, user) {
+   if(err) {
+      console.log(err);
+      return res.status(500).send("err");
+    }
+    if(!user) {
+       return res.status(404).send({success: false, msg: 'username not found',status:'0'});
+    }
+    for(i=0;i < user.employee_list.length;i++) {
+      if(user.employee_list[i].emp_id == req.body.employee.emp_id){
+         user.employee_list[i] = req.body.employee;
+         console.log(business_flag);
+         if(business_flag)
+            user.business_details.employee_list[i] = req.body.employee;
+      }
+  }
+
+    user.save(function (err, updatedUser) {
+       if(err) {
+          console.log(err);
+          return res.status(500).send("err");
+        }
+    res.send({success : true, employee_list:updatedUser.employee_list,msg: 'updated employee list',status:'1'})
+    });
+  });
+});
 
 app.post('/employee_rm' , function(req,res) {
   User.findById(req.body.id, function (err, user) {
