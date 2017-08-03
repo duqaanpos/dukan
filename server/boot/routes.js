@@ -720,7 +720,7 @@ app.post('/customerinfo', function(req,res) {
         if (person)
           return res.send({success: true, 'customerinfo' : person, msg: 'Customer Info', status : '1'});
         else
-          return res.send({success: true, msg: 'No such customer', status : '1'});
+          return res.send({success: false, msg: 'No such customer', status : '0'});
 
       });
     });
