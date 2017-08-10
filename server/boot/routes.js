@@ -544,7 +544,7 @@ app.post('/transactionlist', function(req,res) {
          console.log(err);
          return res.status(500).send("err");
        }
-      return res.send({success: true, 'Employee Transactions' : transactionlist, msg: 'Employee Transactions', status : '1'});
+      return res.send({success: true, 'Employee_Transactions' : transactionlist, msg: 'Employee Transactions', status : '1'});
     });
   }
   else if (req.body.cust_id)
@@ -557,7 +557,20 @@ app.post('/transactionlist', function(req,res) {
          console.log(err);
          return res.status(500).send("err");
        }
-      return res.send({success: true, 'Customer Transactions' : transactionlist, msg: 'Customer Transactions', status : '1'});
+      return res.send({success: true, 'Customer_Transactions' : transactionlist, msg: 'Customer Transactions', status : '1'});
+    });
+  }
+  else if (req.body.txn_id)
+  {
+    Transaction.find({"user_id" : req.body.id,
+                       "_id" : req.body.txn_id},
+                       function(err, transactionlist){
+      if(err) {
+         console.log('No such transaction');
+         console.log(err);
+         return res.status(500).send("err");
+       }
+      return res.send({success: true, 'Transaction_Details' : transactionlist, msg: 'Transaction_Details', status : '1'});
     });
   }
 else
@@ -766,7 +779,7 @@ app.post('/customerlist', function(req,res) {
        return res.status(500).send("err");
      }
     //console.log(customerlist);
-    return res.send({success: true, 'Customer List' : customerlist, msg: 'Customer List', status : '1'});
+    return res.send({success: true, 'Customer_List' : customerlist, msg: 'Customer List', status : '1'});
     //customerlist.toArray(res);
   });
 
